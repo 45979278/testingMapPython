@@ -2,14 +2,14 @@ import streamlit as st
 from streamlit.components.v1 import html
 
 st.set_page_config(
-    page_title="Body shop Map",
+    page_title="Bodyshop Map",
     layout="wide"
 )
 
 st.title("Bodyshop Map")
-st.write("Top‑down.")
+st.write("Top‑down")
 
-warehouse_html = """
+bodyshop_html = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,39 +33,33 @@ warehouse_html = """
         border: 2px solid #123456;
     }
 
-    /* Zones */
-    .zone {
-        stroke: #123456;
-        stroke-width: 2;
-        opacity: 0.9;
-    }
-
-    .receiving { fill: #194d85; }   /* Marina Bay Blue */
-    .storage   { fill: #294061; }   /* Portimao Blue */
-    .picking   { fill: #131e33; }   /* Tanzanite Blue II */
-    .shipping  { fill: #1a3375; }   /* San Marino Blue */
-
-    /* Walkways */
-    .walkway {
-        fill: #669999;              /* Laguna Seca Blue */
-        stroke: #4a678c;            /* Frozen Portimao Blue */
-        stroke-dasharray: 6,6;
-        opacity: 0.7;
+    /* Roads / corridors */
+    .road {
+        fill: none;
+        stroke: #669999;            /* Laguna Seca Blue */
+        stroke-width: 6;
+        stroke-linecap: round;
     }
 
     /* Labels */
     .label {
-        font-size: 12px;
+        font-size: 11px;
         font-weight: bold;
         fill: #4c6e91;              /* Arctic Race Blue */
         pointer-events: none;
     }
 
-    /* Person marker */
+    /* Start & person */
     #person {
         fill: #008b8b;              /* Snapper Rocks Blue */
         stroke: #123456;
         stroke-width: 1.5;
+    }
+
+    .start-label {
+        fill: #123456;
+        font-size: 11px;
+        font-weight: bold;
     }
 </style>
 </head>
@@ -73,48 +67,58 @@ warehouse_html = """
 <body>
 <div id="map-container">
 
-<svg id="warehouseMap" width="800" height="800" viewBox="0 0 200 200">
+<svg id="map" width="900" height="800" viewBox="0 0 200 200">
 
-    <!-- Warehouse Boundary -->
-    <rect x="0" y="0" width="200" height="200"
-          fill="none" stroke="#123456" stroke-width="2"/>
+    <!-- Warehouse boundary -->
+    <rect x="0" y="0" width="200" height="200" fill="none"
+          stroke="#123456" stroke-width="2"/>
 
-    <!-- Walkways -->
-    <rect class="walkway" x="90" y="0" width="20" height="200"/>
-    <rect class="walkway" x="0" y="95" width="200" height="20"/>
+    <!-- ================= METAL FINISH (PARALLEL HORIZONTAL ROADS) ================= -->
 
-    <!-- Zones -->
-    <rect class="zone receiving" x="0" y="0" width="80" height="80"/>
-    <text class="label" x="10" y="20">Receiving</text>
+    <line class="road" x1="10" y1="40" x2="190" y2="40"/>
+    <line class="road" x1="10" y1="55" x2="190" y2="55"/>
 
-    <rect class="zone storage" x="120" y="0" width="80" height="80"/>
-    <text class="label" x="130" y="20">Storage</text>
+    <text class="label" x="12" y="35">Metal Finish</text>
+    <text class="label" x="12" y="70">Metal Finish</text>
 
-    <rect class="zone picking" x="0" y="120" width="80" height="80"/>
-    <text class="label" x="10" y="140">Picking</text>
+    <!-- ================= VERTICAL FRAMING SPINE ================= -->
 
-    <rect class="zone shipping" x="120" y="120" width="80" height="80"/>
-    <text class="label" x="130" y="140">Shipping</text>
+    <line class="road" x1="160" y1="55" x2="160" y2="180"/>
 
-    <!-- You are here indicator -->
-    <circle id="person" cx="100" cy="100" r="4"/>
-    <text class="label" x="108" y="102">You</text>
+    <!-- Framing sections (RIGHT SIDE) -->
+    <text class="label" x="165" y="80">Framing 3</text>
+    <text class="label" x="165" y="110">Framing 2</text>
+    <text class="label" x="165" y="140">Framing 1</text>
+
+    <!-- Sideframe sections (LEFT SIDE) -->
+    <text class="label" x="110" y="80">Sideframe Outer</text>
+    <text class="label" x="110" y="110">Sideframe Middle</text>
+    <text class="label" x="110" y="140">Sideframe Inner</text>
+
+    <!-- ================= START LINE ================= -->
+
+    <line class="road" x1="10" y1="170" x2="160" y2="170"/>
+
+    <text class="start-label" x="12" y="165">Start</text>
+
+    <!-- You are here -->
+    <circle id="person" cx="20" cy="170" r="4"/>
+    <text class="label" x="26" y="172">You</text>
 
 </svg>
 </div>
 
 <script>
-const svg = document.getElementById("warehouseMap");
+const svg = document.getElementById("map");
 const person = document.getElementById("person");
 
-/* Click to move person */
-svg.addEventListener("click", function(event) {
+svg.addEventListener("click", function(e) {
     const rect = svg.getBoundingClientRect();
     const scaleX = 200 / rect.width;
     const scaleY = 200 / rect.height;
 
-    const x = (event.clientX - rect.left) * scaleX;
-    const y = (event.clientY - rect.top) * scaleY;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
 
     person.setAttribute("cx", x);
     person.setAttribute("cy", y);
@@ -125,5 +129,5 @@ svg.addEventListener("click", function(event) {
 </html>
 """
 
-html(warehouse_html, height=850)
-
+html(bodyshop_html, height=900)
+``
