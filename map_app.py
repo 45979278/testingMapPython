@@ -2,18 +2,19 @@ import streamlit as st
 from streamlit.components.v1 import html
 
 st.set_page_config(
-    page_title="Bodyshop Map",
+    page_title="Body shop Map",
     layout="wide"
 )
 
 st.title("Bodyshop Map")
-st.write("Top‑down view")
+st.write("Top‑down.")
 
 warehouse_html = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <style>
     body {
         margin: 0;
@@ -29,36 +30,42 @@ warehouse_html = """
 
     svg {
         background: #ffffff;
-        border: 2px solid #333;
+        border: 2px solid #123456;
     }
 
+    /* Zones */
     .zone {
-        stroke: #333;
+        stroke: #123456;
         stroke-width: 2;
-        opacity: 0.85;
+        opacity: 0.9;
     }
 
-    .receiving { fill: #81d4fa; }
-    .storage   { fill: #c5e1a5; }
-    .picking   { fill: #ffcc80; }
-    .shipping  { fill: #ef9a9a; }
+    .receiving { fill: #194d85; }   /* Marina Bay Blue */
+    .storage   { fill: #294061; }   /* Portimao Blue */
+    .picking   { fill: #131e33; }   /* Tanzanite Blue II */
+    .shipping  { fill: #1a3375; }   /* San Marino Blue */
 
+    /* Walkways */
     .walkway {
-        fill: #eeeeee;
-        stroke: #999;
+        fill: #669999;              /* Laguna Seca Blue */
+        stroke: #4a678c;            /* Frozen Portimao Blue */
         stroke-dasharray: 6,6;
+        opacity: 0.7;
     }
 
+    /* Labels */
     .label {
         font-size: 12px;
         font-weight: bold;
+        fill: #4c6e91;              /* Arctic Race Blue */
         pointer-events: none;
     }
 
+    /* Person marker */
     #person {
-        fill: red;
-        stroke: black;
-        stroke-width: 1;
+        fill: #008b8b;              /* Snapper Rocks Blue */
+        stroke: #123456;
+        stroke-width: 1.5;
     }
 </style>
 </head>
@@ -68,9 +75,9 @@ warehouse_html = """
 
 <svg id="warehouseMap" width="800" height="800" viewBox="0 0 200 200">
 
-    <!-- Warehouse boundary -->
+    <!-- Warehouse Boundary -->
     <rect x="0" y="0" width="200" height="200"
-          fill="none" stroke="black" stroke-width="2"/>
+          fill="none" stroke="#123456" stroke-width="2"/>
 
     <!-- Walkways -->
     <rect class="walkway" x="90" y="0" width="20" height="200"/>
@@ -89,9 +96,9 @@ warehouse_html = """
     <rect class="zone shipping" x="120" y="120" width="80" height="80"/>
     <text class="label" x="130" y="140">Shipping</text>
 
-    <!-- You are here -->
+    <!-- You are here indicator -->
     <circle id="person" cx="100" cy="100" r="4"/>
-    <text x="108" y="102" font-size="10">You</text>
+    <text class="label" x="108" y="102">You</text>
 
 </svg>
 </div>
@@ -100,6 +107,7 @@ warehouse_html = """
 const svg = document.getElementById("warehouseMap");
 const person = document.getElementById("person");
 
+/* Click to move person */
 svg.addEventListener("click", function(event) {
     const rect = svg.getBoundingClientRect();
     const scaleX = 200 / rect.width;
@@ -118,3 +126,4 @@ svg.addEventListener("click", function(event) {
 """
 
 html(warehouse_html, height=850)
+
